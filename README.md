@@ -1,13 +1,30 @@
-# MtG Sideboard Guide generator
+# Magic: The Gathering Sideboard Tools
 
-This notebook will guide you how to create concise sideboard guides, printable on a 63 x 88 mm 
-standard card. It will load the data from a tab delimited text file, use **pandas** to transform 
-the data to a matrix. Next, using a **jinja2** template, these data are turned into an **SVG** image.
 
-![example guide](./img/example_guide.png "Example Guide")
+## Initial idea and credits
 
-## Example data
+Original Jupyter notebook and idea by [Sebastian Proost](https://github.com/sepro).
 
-The included example data are for [BUG Delver](./img/BUG_index.png), [Death and Taxes](./img/death_and_taxes_index.png),
- [Lands](./img/Lands_index.png) and [Sneak 'n Show](./img/Show_and_Tell_index.png).
+Refined and extended by [gate/mindbreaktrap](https://github.com/mindbreaktrap).
+
+JSON template by [Tommy Hinks](https://github.com/thinks).
+
+The original notebook turned a .txt file into a .svg using Pandas and a Jinja2 template.
+An example can be seen below.
+
+![Example](./docs/examples/dnt.svg "Example Guide")
+
+I extended this idea to use a .json file as the source as that is much more readable and easier to edit.
+
+## Roadmap
+
+I am planning on extending this tool suite to allow import of decklists from other sources, such as MTGO, Arena, and other decklist sites.
+
+I also want to make the process of creating the .json file easier by creating a web interface to input data and validate it.
+
+## Setup and usage
+
+TBA
+
+
 
