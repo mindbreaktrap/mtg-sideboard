@@ -144,3 +144,5 @@ settings.json
 
 # Project specific
 output.svg
+shadow.json
+shadow.txt
