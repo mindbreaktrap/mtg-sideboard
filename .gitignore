@@ -141,3 +141,6 @@ $RECYCLE.BIN/
 # VSCode
 .vscode
 settings.json
+
+# Project specific
+output.svg
