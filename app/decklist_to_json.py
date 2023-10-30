@@ -46,17 +46,33 @@ def read_decklist(path: str) -> dict:
 
 
 if __name__ == "__main__":
-    metadata = input_metadata()
-    decklist = read_decklist("shadow.txt")
+    in_decklist_location = input("Enter the decklist location: ")
+    # metadata = input_metadata()
+    decklist = read_decklist(in_decklist_location)
     # merge those dicts
-    decklist.update(metadata)
+    # decklist.update(metadata)
 
-    # TODO ask for screen names
+    # ask for screen names
     decklist.update({"screen_names": {}})
+    # merge a list of all keys in sideboard and mainboard
+    # this way we can ask for screen names for all cards at once
+    all_cards = list(decklist["decklist"]["maindeck"].keys()) + list(
+        decklist["decklist"]["sideboard"].keys()
+    )
+    # sort them alphabetically
+    all_cards.sort()
+    # remove duplicates
+    all_cards = list(dict.fromkeys(all_cards))
+    # ask for screen names for all cards
+    for card in all_cards:
+        tmp = input(f"Enter screen name for {card}: ")
+        if tmp != "":
+            decklist["screen_names"][card] = tmp
 
     # TODO get matchups
     decklist.update({"matchups": {}})
 
     # save json to file
-    with open("shadow.json", "w") as f:
+    out_decklist_location = input("Enter the output location (filename): ")
+    with open(out_decklist_location, "w") as f:
         json.dump(decklist, f, indent=4)
