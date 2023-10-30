@@ -1,5 +1,10 @@
 # Magic: The Gathering Sideboard Tools
 
+## Features
+
+- Convert a MTGO decklist in .txt format to a .json file including display names for cards
+- Convert a .json file to a pandas-readable .txt file
+- Create a sideboard guide .svg from a correctly formatted .txt file
 
 ## Initial idea and credits
 
@@ -18,13 +23,12 @@ I extended this idea to use a .json file as the source as that is much more read
 
 ## Roadmap
 
-I am planning on extending this tool suite to allow import of decklists from other sources, such as MTGO, Arena, and other decklist sites.
-
-I also want to make the process of creating the .json file easier by creating a web interface to input data and validate it.
+I want to make the process of creating the boardings content easier by creating a web interface to input data and validate it.
 
 ## Setup and usage
 
-TBA
-
+1. `pipenv install --dev --deploy`
+2. `pipenv shell`
+3. `python app/your_desired_script.py`
 
 
