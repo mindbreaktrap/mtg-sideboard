@@ -13,14 +13,10 @@ def input_metadata() -> dict:
     return {"title": decktitle, "author": author, "date": date}
 
 
-def read_decklist(path: str) -> dict:
-    """Reads a decklist from a txt file and returns a dict with the decklist separated into MB and SB."""
-    # create a list of all lines from the input path txt
-    # remove newlines and empty lines
-    with open(path, "r") as f:
-        lines = f.readlines()
-        lines = [line.strip() for line in lines]
-        lines = list(filter(None, lines))
+def read_decklist(input: str) -> dict:
+    """Reads a decklist as string and returns a dict with the decklist separated into MB and SB."""
+    lines = input.split("\n")
+    lines = list(filter(None, lines))
 
     # split the list at occurence of word "SIDEBOARD" into two parts
     # first part is the mainboard, second part is the sideboard
