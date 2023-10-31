@@ -32,17 +32,8 @@ def pivot_and_filter(deckname: str, dataframe: pd.DataFrame) -> pd.DataFrame:
     return mt
 
 
-def color_by_value(val):
-    """Function to set text color in pandas depending of sb/mb movement."""
-    color = "black"
-    v = int(val)
-    color = "red" if v < 0 else "green"
-    return "color: %s" % color
-
-
 def create_svg_from_dataframe(deckname: str, dataframe: pd.DataFrame) -> SVG:
     """Creates the SVG from the dataframe."""
-    dataframe.style.applymap(color_by_value)
     env = Environment(loader=FileSystemLoader("input"))
     template = env.get_template("template.svg")
     template_vars = {
@@ -69,4 +60,10 @@ def txt_to_svg(filepath: str) -> None:
 
 
 if __name__ == "__main__":
-    txt_to_svg("input/sideboards.txt")
+    # read .txt location and default to docs/examples/sideboards.txt if not provided
+    filepath = input(
+        "Enter filepath to txt file (default: docs/examples/sideboards.txt): "
+    )
+    if filepath == "":
+        filepath = "docs/examples/sideboards.txt"
+    txt_to_svg(filepath)
