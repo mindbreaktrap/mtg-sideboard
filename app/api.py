@@ -1,36 +1,23 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
 
+from app.db import init
 from app.decklist_to_json import read_decklist
-from app.convert_json_to_txt import table_header, boarding_in, boarding_out
-
-app = FastAPI()
+from app.models import Decklist
 
 
-class Maindeck(BaseModel):
-    """Consists of atleast 60 cards."""
-
-    maindeck: dict[str, int]
-
-
-class Sideboard(BaseModel):
-    """Consists of exactly 15 cards."""
-
-    sideboard: dict[str, int]
+@asynccontextmanager
+async def lifespan(api: FastAPI):
+    await init()
+    yield
 
 
-class Decklist(BaseModel):
-    maindeck: Maindeck
-    sideboard: Sideboard
+api = FastAPI(lifespan=lifespan)
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.post("/decklist/txt")
+@api.post("/decklist/txt")
 async def decklist_txt_to_json(request: Request):
     """This route takes a decklist in .txt format and converts it to json."""
     decklist = await request.body()
@@ -45,8 +32,8 @@ async def decklist_txt_to_json(request: Request):
         )
 
 
-@app.post("/decklist/json")
+@api.post("/decklist/json")
 async def decklist_json_to_json(input: Decklist):
     """This route takes a decklist in .json format and returns it."""
-    result = table_header()
-    result += boarding_in(input.maindeck, input.sideboard)
+    await Decklist.insert_one(input)
+    return None

@@ -1,0 +1,14 @@
+
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: default_username_local_only
+      MONGO_INITDB_ROOT_PASSWORD: default_password_local_only
+    ports:
+      - 27017:27017
+    
