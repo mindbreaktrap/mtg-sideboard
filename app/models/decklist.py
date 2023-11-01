@@ -1,12 +1,15 @@
+import uuid
 from typing import Dict
 
 from beanie import Document
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class Deck(BaseModel):
-    maindeck: Dict[str, int]
-    sideboard: Dict[str, int]
+    maindeck: Dict[str, int] = Field(
+        ..., examples=[{"Entomb": 4, "Faithless Looting": 4}]
+    )
+    sideboard: Dict[str, int] = Field(..., examples=[{"Wear//Tear": 2}])
 
     @field_validator("maindeck")
     def validate_maindeck(cls, maindeck):
@@ -22,7 +25,11 @@ class Deck(BaseModel):
 
 
 class Decklist(Document):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, alias="_id")
     decklist: Deck
+
+    class Settings:
+        name = "decklists"
 
 
 if __name__ == "__main__":

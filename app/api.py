@@ -1,11 +1,12 @@
+import json
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
 from app.db import init
 from app.decklist_to_json import read_decklist
-from app.models import Decklist
+from app.models.decklist import Deck, Decklist
 
 
 @asynccontextmanager
@@ -17,15 +18,30 @@ async def lifespan(api: FastAPI):
 api = FastAPI(lifespan=lifespan)
 
 
+# exception handler for pydantic validation errors
+@api.exception_handler(ValueError)
+async def validation_exception_handler(request: Request, exc: ValueError):
+    return JSONResponse(
+        status_code=400,
+        content={"message": str(exc)},
+    )
+
+
 @api.post("/decklist/txt")
 async def decklist_txt_to_json(request: Request):
-    """This route takes a decklist in .txt format and converts it to json."""
+    """This route takes a decklist in .txt format and converts it to json.\n
+    Example:\n
+    4 Entomb\n
+    4 Faithless Looting\n
+    4 Reanimate\n
+    \n
+    SIDEBOARD:\n
+    2 Wear//Tear\n
+    """
     decklist = await request.body()
-    # convert binary to string
-    decklist = decklist.decode("utf-8")
-    # save decklist to temporary file with random name
+    decklist = read_decklist(decklist.decode("utf-8")).get("decklist")
     try:
-        return read_decklist(decklist)
+        return await decklist_json_to_database(Deck(**decklist))  # type: ignore
     except ValueError:
         return JSONResponse(
             status_code=400, content={"message": "Invalid decklist format."}
@@ -33,7 +49,10 @@ async def decklist_txt_to_json(request: Request):
 
 
 @api.post("/decklist/json")
-async def decklist_json_to_json(input: Decklist):
+async def decklist_json_to_database(input: Deck):
     """This route takes a decklist in .json format and returns it."""
-    await Decklist.insert_one(input)
-    return None
+    result = Decklist(decklist=input)
+    result = await result.insert()  # type: ignore
+    return JSONResponse(
+        status_code=status.HTTP_201_CREATED, content={"id": str(result.id)}
+    )
