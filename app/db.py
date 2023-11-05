@@ -7,5 +7,9 @@ async def init():
         "mongodb://default_username_local_only:default_password_local_only@localhost:27017"
     )
     await init_beanie(
-        database=client.mtgsideboards, document_models=["app.models.decklist.Decklist"]
+        database=client.mtgsideboards,
+        document_models=[
+            "app.models.decklist.Decklist",
+            "app.models.boardings.Boarding",
+        ],
     )
