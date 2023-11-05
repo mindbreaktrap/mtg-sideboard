@@ -41,7 +41,7 @@ async def create_boarding_for_matchup(input: BoardingInput):
     },
 )
 async def get_boarding(deckname: str | None = None, id: uuid.UUID | None = None):
-    """This route returns a boarding from the db by deckname and/or id."""
+    """This route returns a list of boardings from the db by deckname and/or id."""
     # CASE 1: no parameters are given, return all boardings
     if deckname is None and id is None:
         results = Boarding.find_many({})

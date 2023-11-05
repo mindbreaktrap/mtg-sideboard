@@ -5,7 +5,8 @@ from beanie import Document
 from pydantic import BaseModel, Field, field_validator
 
 
-class Deck(BaseModel):
+class DecklistInput(BaseModel):
+    deckname: str = Field(..., examples=["Death's Shadow"])
     maindeck: Dict[str, int] = Field(
         ...,
         examples=[
@@ -54,6 +55,16 @@ class Deck(BaseModel):
             }
         ],
     )
+    screen_names: Dict[str, str] = Field(
+        ...,
+        examples=[
+            {
+                "Brazen Borrower": "BB",
+                "Dauthi Voidwalker": "Dauthi",
+                "Fatal Push": "Push",
+            }
+        ],
+    )
 
     @field_validator("maindeck")
     def validate_maindeck(cls, maindeck):
@@ -68,40 +79,8 @@ class Deck(BaseModel):
         return maindeck
 
 
-class Decklist(Document):
+class Decklist(DecklistInput, Document):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, alias="_id")
-    decklist: Deck
 
     class Settings:
         name = "decklists"
-
-
-if __name__ == "__main__":
-    # Test with too small deck
-    try:
-        deck = Deck(maindeck={"Forest": 20}, sideboard={"Giant Growth": 15})
-    except ValueError:
-        print("Deck validation failed as expected.")
-    else:
-        raise AssertionError("Deck validation should have failed.")
-
-    # Test with valid deck
-    try:
-        deck = Deck(maindeck={"Forest": 60}, sideboard={"Giant Growth": 15})
-        print("Deck validation passed as expected.")
-    except ValueError:
-        raise AssertionError("Deck validation should have passed.")
-
-    # Test with no sideboard
-    try:
-        deck = Deck(maindeck={"Forest": 60}, sideboard={})
-    except ValueError:
-        print("Deck validation failed as expected.")
-
-    # Test with completely empty deck
-    try:
-        deck = Deck(maindeck={}, sideboard={})
-    except ValueError:
-        print("Deck validation failed as expected.")
-    else:
-        raise AssertionError("Deck validation should have failed.")

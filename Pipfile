@@ -12,6 +12,7 @@ beanie = "*"
 
 [dev-packages]
 ipykernel = "*"
+requests = "*"
 
 [requires]
 python_version = "3.11"
