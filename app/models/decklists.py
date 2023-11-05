@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class DecklistInput(BaseModel):
-    deckname: str = Field(..., examples=["Death's Shadow"])
+    deckname: str = Field(..., examples=["UB Shadow"])
     maindeck: Dict[str, int] = Field(
         ...,
         examples=[

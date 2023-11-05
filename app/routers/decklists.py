@@ -36,3 +36,10 @@ async def create_decklist_from_json(input: DecklistInput):
     result = Decklist(**input.model_dump())
     result = await result.insert()  # type: ignore
     return Created(str(result.id))
+
+
+@router.get("/{id}", response_model=Decklist, status_code=200)
+async def get_decklist(id: str):
+    """This route takes a decklist id and returns the corresponding Decklist."""
+    result = await Decklist.get(id)
+    return result
