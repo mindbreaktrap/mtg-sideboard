@@ -9,7 +9,7 @@ async def init():
     await init_beanie(
         database=client.mtgsideboards,
         document_models=[
-            "app.models.decklist.Decklist",
+            "app.models.decklists.Decklist",
             "app.models.boardings.Boarding",
         ],
     )
