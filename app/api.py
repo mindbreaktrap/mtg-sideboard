@@ -42,7 +42,11 @@ async def decklist_txt_to_json(request: Request):
     return await decklist_json_to_database(Deck(**decklist))  # type: ignore
 
 
-@api.post("/decklist/json")
+@api.post(
+    "/decklist/json",
+    response_model=Created.Model,
+    status_code=Created.status_code,
+)
 async def decklist_json_to_database(input: Deck):
     """This route takes a decklist in .json format and returns it."""
     result = Decklist(decklist=input)

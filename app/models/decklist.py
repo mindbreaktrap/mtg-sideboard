@@ -7,9 +7,53 @@ from pydantic import BaseModel, Field, field_validator
 
 class Deck(BaseModel):
     maindeck: Dict[str, int] = Field(
-        ..., examples=[{"Entomb": 4, "Faithless Looting": 4}]
+        ...,
+        examples=[
+            {
+                "Brainstorm": 4,
+                "Dauthi Voidwalker": 1,
+                "Daze": 4,
+                "Death's Shadow": 4,
+                "Dismember": 1,
+                "Dress Down": 1,
+                "Flooded Strand": 1,
+                "Force of Will": 4,
+                "Island": 1,
+                "Murktide Regent": 3,
+                "Orcish Bowmasters": 4,
+                "Polluted Delta": 4,
+                "Ponder": 4,
+                "Reanimate": 3,
+                "Snuff Out": 1,
+                "Street Wraith": 3,
+                "Swamp": 1,
+                "Thoughtseize": 4,
+                "Troll of Khazad-d\u00fbm": 3,
+                "Underground Sea": 2,
+                "Wasteland": 4,
+                "Watery Grave": 3,
+            }
+        ],
     )
-    sideboard: Dict[str, int] = Field(..., examples=[{"Wear//Tear": 2}])
+    sideboard: Dict[str, int] = Field(
+        ...,
+        examples=[
+            {
+                "Brazen Borrower": 1,
+                "Dauthi Voidwalker": 1,
+                "Dress Down": 1,
+                "Fatal Push": 2,
+                "Force of Negation": 2,
+                "Hydroblast": 1,
+                "Null Rod": 1,
+                "Palant\u00edr of Orthanc": 1,
+                "Plague Engineer": 1,
+                "Powder Keg": 1,
+                "Sheoldred's Edict": 1,
+                "Surgical Extraction": 2,
+            }
+        ],
+    )
 
     @field_validator("maindeck")
     def validate_maindeck(cls, maindeck):
