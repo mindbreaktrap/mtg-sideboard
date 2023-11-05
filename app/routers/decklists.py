@@ -2,9 +2,9 @@ from fastapi import APIRouter, Request
 
 from app.decklist_to_json import read_decklist
 from app.models.decklists import Deck, Decklist
-from app.models.responses import Created
+from app.models.responses import Created, CreatedResponseModel
 
-router = APIRouter(prefix="/decklist", tags=["decklist"])
+router = APIRouter(prefix="/decklists", tags=["Decklists"])
 
 
 @router.post("/txt")
@@ -28,7 +28,7 @@ async def create_decklist_from_txt(request: Request):
 
 @router.post(
     "/json",
-    response_model=Created.Model,
+    response_model=CreatedResponseModel,
     status_code=Created.status_code,
 )
 async def create_decklist_from_json(input: Deck):

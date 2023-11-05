@@ -1,10 +1,10 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status
 from fastapi.templating import Jinja2Templates
 
 from app.db import init
-from app.models.responses import BadRequest
+from app.models.responses import BadRequest, BadRequestResponseModel
 from app.routers import boardings, decklists
 
 
@@ -19,6 +19,9 @@ api = FastAPI(
     description="This is a tool to generate decklists and boarding guides for Magic: The Gathering. It is currently in development.",
     version="alpha",
     lifespan=lifespan,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": BadRequestResponseModel},
+    },
 )
 templates = Jinja2Templates(directory="app/templates")
 
@@ -34,7 +37,7 @@ api.include_router(decklists.router)
 
 
 # Serve a static HTML Frontend
-@api.get("/")
+@api.get("/", include_in_schema=False)
 async def root(request: Request):
     content = {
         "request": request,
